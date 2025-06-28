@@ -36,6 +36,11 @@ docker-compose exec app php artisan config:clear
 docker-compose exec app php artisan cache:clear
 docker-compose exec app php artisan route:clear
 
+# Corrigir permissões
+echo "🔒 Corrigindo permissões..."
+docker-compose exec app chown -R laravel:laravel storage bootstrap/cache
+docker-compose exec app chmod -R 775 storage bootstrap/cache
+
 echo "✅ PetHelp iniciado com sucesso!"
 echo "🌐 Acesse: http://localhost:8000"
 echo "📊 API: http://localhost:8000/api"

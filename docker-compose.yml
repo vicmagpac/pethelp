@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15
+    container_name: pethelp_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: pethelp
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - pethelp_network
+
+  # Laravel Application
+  app:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: pethelp_app
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - ./backend:/var/www
+      - ./backend/storage:/var/www/storage
+    networks:
+      - pethelp_network
+    depends_on:
+      - postgres
+
+  # Nginx Web Server
+  nginx:
+    image: nginx:alpine
+    container_name: pethelp_nginx
+    restart: unless-stopped
+    ports:
+      - "8000:80"
+    volumes:
+      - ./backend:/var/www
+      - ./docker/nginx/conf.d:/etc/nginx/conf.d
+    networks:
+      - pethelp_network
+    depends_on:
+      - app
+
+  # Redis (para cache e sessões)
+  redis:
+    image: redis:alpine
+    container_name: pethelp_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    networks:
+      - pethelp_network
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  pethelp_network:
+    driver: bridge 

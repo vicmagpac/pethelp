@@ -13,10 +13,12 @@ O PetHelp é uma plataforma que permite:
 
 ## 🏗️ Arquitetura
 
-- **Backend**: Laravel 10 (PHP)
+- **Backend**: Laravel 10 (PHP) + PostgreSQL
 - **Frontend**: Angular 18 (TypeScript)
-- **Banco de Dados**: MySQL/PostgreSQL
-- **APIs**: Google Maps, QR Code generation
+- **Banco de Dados**: PostgreSQL
+- **Cache**: Redis
+- **Web Server**: Nginx
+- **Containerização**: Docker
 
 ## 📁 Estrutura do Projeto
 
@@ -24,13 +26,55 @@ O PetHelp é uma plataforma que permite:
 pethelp/
 ├── backend/          # API Laravel
 ├── frontend/         # Aplicação Angular
+├── docker/           # Configurações Docker
+│   ├── nginx/        # Configuração Nginx
+│   └── scripts/      # Scripts de automação
 ├── docs/            # Documentação
 └── README.md        # Este arquivo
 ```
 
 ## 🚀 Como Executar
 
-### Backend (Laravel)
+### 🐳 Com Docker (Recomendado)
+
+**Pré-requisitos:**
+- Docker
+- Docker Compose
+
+**Passos:**
+```bash
+# Clone o repositório
+git clone https://github.com/seu-usuario/pethelp.git
+cd pethelp
+
+# Execute o script de inicialização
+./docker/scripts/start.sh
+```
+
+**Acesso:**
+- 🌐 Aplicação: http://localhost:8000
+- 📊 API: http://localhost:8000/api
+- 🗄️ PostgreSQL: localhost:5432
+- 🔴 Redis: localhost:6379
+
+**Comandos úteis:**
+```bash
+# Ver logs
+docker-compose logs -f
+
+# Parar containers
+docker-compose down
+
+# Reiniciar containers
+docker-compose restart
+
+# Executar comandos no container
+docker-compose exec app php artisan migrate
+```
+
+### 🔧 Desenvolvimento Local
+
+#### Backend (Laravel)
 
 ```bash
 cd backend
@@ -41,7 +85,7 @@ php artisan migrate
 php artisan serve
 ```
 
-### Frontend (Angular)
+#### Frontend (Angular)
 
 ```bash
 cd frontend
@@ -77,6 +121,8 @@ ng serve
 
 ## 🎯 Próximos Passos
 
+- [x] Configuração do Docker
+- [x] Estrutura inicial do projeto
 - [ ] Configuração do banco de dados
 - [ ] API de autenticação
 - [ ] CRUD de pontos de alimentação
@@ -90,9 +136,11 @@ ng serve
 
 Este é um projeto open-source para ajudar animais de rua. Contribuições são bem-vindas!
 
+Veja o arquivo [CONTRIBUTING.md](CONTRIBUTING.md) para detalhes sobre como contribuir.
+
 ## 📄 Licença
 
-MIT License - veja o arquivo LICENSE para detalhes.
+MIT License - veja o arquivo [LICENSE](LICENSE) para detalhes.
 
 ---
 
